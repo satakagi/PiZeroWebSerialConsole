@@ -1,0 +1,96 @@
+.filelistdiv {
+	overflow-x: hidden;
+	width: 180px;
+	height: 300px;
+	padding: 0;
+}
+.filelist {
+	width: 180px;
+	margin: 0;
+	padding: 0;
+}
+.filelist li {
+	position: relative;
+	width: 180px;
+	height: 20px;
+	white-space: nowrap;
+}
+.filelist > li,
+.filelist li:last-child,
+.filelist li:hover > ul > li,
+.filelist li > ul > li:last-child {
+	border-bottom: none;
+}
+.filelist li span {
+	display: block;
+	width: 180px;
+	height: 20px;
+	color: #fff;
+	font-size: 14px;
+	line-height: 1.4;
+	padding: 0 3px;
+	background: #356;
+	border-bottom: 1px solid #eee;
+	box-sizing: border-box;
+	text-decoration: none;
+}
+.filelist > li:hover > span {
+	color: orange;
+	background: #46f;
+	cursor: pointer;
+}
+.filelist > li:hover > span > label {
+	cursor: pointer;
+}
+.filelist > li li:hover > span {
+	color: #611;
+	background: #d4f;
+	cursor: pointer;
+}
+.filelist li:hover > ul > li {
+	overflow: visible;
+	top: -20px;
+	left: 40px;
+	height: 20px;
+	z-index: 2;
+}
+.filelist li ul li {
+	overflow: hidden;
+	height: 0;
+	list-style: none;
+}
+.filelist li ul li span {
+	background: #93d;
+	width: 100px;
+}
+.filelist li:hover ul li ul li:hover > span {
+	color: #22a;
+	background: #d01;
+	z-index: 3;
+}
+.filelist li:hover > ul > li:hover > ul > li {
+	left: 10px;
+}
+.filelist li ul li ul li span {
+	background: #622;
+	width: 50px;
+}
+#fileListTable {
+	width: 200px;
+	height: 420px;
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	background-color: #f9f9f9;
+	color: #000;
+	font-size: 10px;
+}
+input {
+	font-size: 9px;
+}
+button {
+	font-size: 12px;
+}
+table {
+	table-layout: fixed;
+}
