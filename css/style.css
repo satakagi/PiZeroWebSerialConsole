@@ -94,3 +94,108 @@ button {
 table {
 	table-layout: fixed;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* 全体の高さ設定と余白調整 */
+html, body {
+	height: 100vh;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	padding: 0 10px;
+	box-sizing: border-box;
+}
+
+/* メインコンテナをFlexboxにして残りの高さをすべて埋める */
+#mainContainer {
+	display: flex;
+	flex: 1; /* 残りの高さを占有 */
+	min-height: 0; /* Flexboxの子要素があふれないようにするおまじない */
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+/* ターミナル側（広がる割合:7、縮む割合:1、基準幅:740px） */
+#terminalContainer {
+	flex: 7 1 740px;
+	min-width: 400px; 
+	position: relative;
+}
+
+#terminal {
+	width: 100%;
+	height: 100%;
+}
+
+/* ファイルリスト側（広がる割合:1、縮む割合:0、基準幅:200px） */
+#fileListContainer {
+	flex: 1 0 200px; 
+	min-width: 200px;
+	display: flex;
+	flex-direction: column;
+}
+
+#fileListTable, .filelistdiv {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	border: 1px solid #ccc;
+	overflow-y: auto;
+}
+
+/* 既存の固定幅の削除と上書き */
+.filelist {
+	width: 100%;
+}
+.filelist li {
+	width: 100%;
+}
+.filelist li span {
+	width: 100%;
+}
+
+
+
+/* ボタンのモダン化（基本スタイル） */
+button {
+	font-size: 12px;
+	padding: 6px 14px; /* 内側の余白を少し広げて押しやすく */
+	margin: 2px 4px 2px 0; /* ボタン同士の隙間 */
+	border: none; /* デフォルトの枠線を消す */
+	border-radius: 4px; /* 角を少し丸める */
+	background-color: #007bff; /* さわやかなブルー */
+	color: #ffffff;
+	cursor: pointer;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* うっすらとした影 */
+	transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease; /* アニメーションを滑らかに */
+}
+
+/* マウスを乗せた時（ホバー）の挙動 */
+button:hover {
+	background-color: #0056b3; /* 少し濃い青にする */
+}
+
+/* クリックした時（アクティブ）の挙動 */
+button:active {
+	transform: translateY(1px); /* 1px下に沈み込む */
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* 影を小さくして押し込み感を出す */
+}
+
+/* 切断やキャンセルのボタンを落ち着いた茶色に変更 */
+#closeBtn, #createTxtCancelBtn {
+	background-color: #795548; /* 落ち着いたモカブラウン */
+}
+
+#closeBtn:hover, #createTxtCancelBtn:hover {
+	background-color: #5d4037; /* ホバー時は少し濃い茶色にして押し込み感を演出 */
+}

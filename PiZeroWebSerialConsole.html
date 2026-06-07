@@ -7,6 +7,7 @@
 		<link rel="stylesheet" href="https://unpkg.com/xterm@4.0.0/css/xterm.css" />
 		<link rel="stylesheet" href="./css/style.css" />
 		<script src="https://unpkg.com/xterm@4.0.0/lib/xterm.js"></script>
+		<script src="https://unpkg.com/xterm-addon-fit@0.3.0/lib/xterm-addon-fit.js"></script>
 	</head>
 	<body>
 		<h3>Web Serial Raspberry Pi Zero USB OTG Serial Console</h3>
@@ -15,38 +16,35 @@
 			Chrome or Edge.
 		</p>
 
-		<table border="1">
-			<tr>
-				<td colspan="2">
-					<button id="connectBtn">Connect and Login PiZero</button>
-					<span id="cmdBtns" style="display: none">
-						<button id="closeBtn">Close Connection</button>
-						<button id="homeBtn">HOME</button>
-						<button id="lsBtn">ls -al</button>
-						<button id="wifiBtn">wifi panel</button>
-						<button id="chirimenBtn">CHIRIMEN panel</button>
-						upload:
-						<input type="file" id="fileUpl" />
-						<span id="progress"></span>
-						<button id="createTxtBtn">createNewText</button>
-						<span id="fileNameInputUI" style="display: none">
-							<input type="text" id="fileNameInput" />
-							<button id="createTxtExecBtn">create</button>
-							<button id="createTxtCancelBtn">cancel</button>
-						</span>
-						<span id="currentDirSpan" style="font-size: 11px"></span>
-					</span>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div id="terminal" style="width: 740px; height: 408px"></div>
-				</td>
-				<td style="width: 200px; height: 420px">
-					<div id="fileListTable" class="filelistdiv"></div>
-				</td>
-			</tr>
-		</table>
+		<div id="controls">
+			<button id="connectBtn">Connect and Login PiZero</button>
+			<span id="cmdBtns" style="display: none">
+				<button id="closeBtn">Close Connection</button>
+				<button id="homeBtn">HOME</button>
+				<button id="lsBtn">ls -al</button>
+				<button id="wifiBtn">wifi panel</button>
+				<button id="chirimenBtn">CHIRIMEN panel</button>
+				upload:
+				<input type="file" id="fileUpl" />
+				<span id="progress"></span>
+				<button id="createTxtBtn">createNewText</button>
+				<span id="fileNameInputUI" style="display: none">
+					<input type="text" id="fileNameInput" />
+					<button id="createTxtExecBtn">create</button>
+					<button id="createTxtCancelBtn">cancel</button>
+				</span>
+				<span id="currentDirSpan" style="font-size: 11px"></span>
+			</span>
+		</div>
+
+		<div id="mainContainer">
+			<div id="terminalContainer">
+				<div id="terminal"></div>
+			</div>
+			<div id="fileListContainer">
+				<div id="fileListTable" class="filelistdiv"></div>
+			</div>
+		</div>
 
 		<script type="module" src="./js/main.js"></script>
 	</body>

@@ -28,7 +28,18 @@ const progressSpan = document.getElementById("progress");
 const fileNameInputUI = document.getElementById("fileNameInputUI");
 const fileNameInput = document.getElementById("fileNameInput");
 
+// FitAddonの初期化と適用
+const fitAddon = new FitAddon.FitAddon();
+term.loadAddon(fitAddon);
+
 term.open(terminalEl);
+fitAddon.fit(); // 初回描画時にサイズを合わせる
+
+// ウィンドウのサイズ変更イベントを監視してターミナルをリサイズ
+window.addEventListener('resize', () => {
+	fitAddon.fit();
+});
+
 term.onData((data) => {
 	serial.write(data);
 });
@@ -102,9 +113,15 @@ async function renderFileList() {
 			fsizeS = Math.floor((10 * fsizeS) / (1024 * 1024)) / 10 + "M";
 		else if (fsizeS > 1024)
 			fsizeS = Math.floor((10 * fsizeS) / 1024) / 10 + "K";
-
+		
 		const fnSpan = document.createElement("span");
-		fnSpan.innerHTML = `<label title="${file.name} : ${fsizeS}bytes">${file.name}</label>`;
+		
+		// ディレクトリかどうかでアイコン（絵文字）を分ける
+		const icon = file.dir ? "📁" : "📄";
+		// 必要であればディレクトリ名だけ太字にするなどのスタイルも当てられます
+		const fw = file.dir ? "bold" : "normal";
+		
+		fnSpan.innerHTML = `<label title="${file.name} : ${fsizeS}bytes" style="font-weight: ${fw};">${icon} ${file.name}</label>`;
 		li.appendChild(fnSpan);
 
 		const actUl = document.createElement("ul");
