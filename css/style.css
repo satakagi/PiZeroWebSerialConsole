@@ -19,6 +19,52 @@ input {
 }
 
 /* =========================================
+   1.1. appHeader
+   ========================================= */
+/* ヘッダー全体（タイトルとリンクの左右振り分け） */
+#appHeader {
+	display: flex;
+	justify-content: space-between; /* 左右の端に配置 */
+	align-items: center;            /* 縦方向の真ん中で揃える */
+	margin: 4px 0 6px 0;
+}
+
+/* アプリケーションタイトル */
+#appTitle {
+	font-size: 12px;
+	color: #555;
+	margin: 0;
+	font-weight: bold;
+	letter-spacing: 0.5px;
+}
+
+/* 右上のアイコン付きリンク */
+#projectLink {
+	display: flex;
+	align-items: center;
+	gap: 6px;                       /* アイコンと文字の間の隙間 */
+	font-size: 11px;
+	color: #f73;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+/* CHIRIMEN アイコンのスタイル */
+#projectIcon {
+	width: 18px;
+	height: 18px;
+	border-radius: 4px;             /* アイコンの角を優しく丸める */
+	object-fit: cover;
+}
+
+#projectLink:hover {
+	color: #007bff;
+}
+#projectLink:hover span {
+	text-decoration: underline;    /* ホバー時は文字だけに下線 */
+}
+
+/* =========================================
    2. レイアウト（Flexboxによるコンテナ分割）
    ========================================= */
 #mainContainer {
