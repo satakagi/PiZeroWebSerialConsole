@@ -43,10 +43,11 @@ Angular版の設計思想（責務レイヤの分離）は、今回のVanilla JS
 | `receive$` <br>*(内部バッファ・プロンプト同期用)* | `SerialManager`内の `receiveBuffer` と `checkWaiter()` | 生のチャンクをクラス内に隠蔽。UI層を汚染せず、内部で安全に文字列を結合して待機状態を解決。 |
 | `exec$` / `readUntilPrompt$` | `SerialManager.writeAndWaitFor()` | 非同期のPromiseとして実装。呼び出し元は `await` だけでストリームの同期待ちが可能になり、直感的。 |
 | Facade / Pipeline / Transport層 | `main.js` / `FileManager` / `SerialManager` | 役割を3つのファイルに分割。循環参照を防ぎ、単一責任の原則（SRP）を遵守。 |
+| `concatMap` / `exhaustMap`<br>*(キューイング・直列化)* | `SerialManager`内の `queue` と `processQueue()` | 非同期のコマンド呼び出しを内部でFIFOキューに蓄積し1つずつ順次実行。競合（Race Condition）を解決。 |
 
-### 2. Promise（Async/Await）によるストリーム同期の解決
-RxJSの `filter` や `takeUntil`、`buffer` などを駆使して構築するプロンプト待機ロジックを、今回は「バッファループ機構」と「Promiseの解決（resolveの保持）」を組み合わせることで、シンプルに実装しました。
-`SerialManager` クラスがバックグラウンドで常にストリームを受け取りながら、条件（正規表現）に一致したときだけ `await` している処理を先に進める構造の非同期制御を実現しています。
+### 2. Promise（Async/Await）とキュー機構によるストリーム同期と直列化
+RxJSの `filter` や `takeUntil`、`buffer` などを駆使して構築するプロンプト待機ロジックを、今回は「バッファループ機構」と「Promiseの解決（resolveの保持）」の組み合わせで実装しています。
+さらに、RxJSの `concatMap` が担う「ストリームの直列化」を、`SerialManager` 内部の配列（`this.queue`）を用いた再帰的なタスク消化ループ（`processQueue`）で再現しました。これにより、バックグラウンドで受信ストリームを監視しながら、衝突することなく複数の非同期送受信を実施する非同期制御を実現しています。
 
 ### 3. 現実のハードウェアに対する「泥臭いハック」のカプセル化
 どれほどソフトウェアレイヤーで美しいストリームを構築しても、相手はRaspberry Pi ZeroのUSB OTGシリアルです。大量のデータを一気に流し込めば、必ずバッファオーバーフローを起こしデータが欠損します。これを防ぐためには、旧コードにあった「泥臭いフロー制御」が不可欠です。
