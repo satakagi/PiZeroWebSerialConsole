@@ -101,7 +101,9 @@ async function renderFileList() {
 
 	const lsFiles = await fileManager.lsal();
 	currentDirFiles = lsFiles.files;
-	currentDirSpan.innerText = await fileManager.pwd();
+	
+	currentDir = await fileManager.pwd();
+	currentDirSpan.innerText = `📂 ${currentDir}`;
 
 	const ul = document.createElement("ul");
 	ul.className = "filelist";

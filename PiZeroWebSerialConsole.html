@@ -24,8 +24,9 @@
 				<button id="lsBtn">ls -al</button>
 				<button id="wifiBtn">wifi panel</button>
 				<button id="chirimenBtn">CHIRIMEN panel</button>
-				upload:
-				<input type="file" id="fileUpl" />
+				<label class="upload-box">
+					upload: <input type="file" id="fileUpl" />
+				</label>
 				<span id="progress"></span>
 				<button id="createTxtBtn">createNewText</button>
 				<span id="fileNameInputUI" style="display: none">
@@ -33,7 +34,7 @@
 					<button id="createTxtExecBtn">create</button>
 					<button id="createTxtCancelBtn">cancel</button>
 				</span>
-				<span id="currentDirSpan" style="font-size: 11px"></span>
+				<!--<span id="currentDirSpan" style="font-size: 11px"></span>-->
 			</span>
 		</div>
 
@@ -42,6 +43,7 @@
 				<div id="terminal"></div>
 			</div>
 			<div id="fileListContainer">
+				<div id="currentDirSpan"></div>
 				<div id="fileListTable" class="filelistdiv"></div>
 			</div>
 		</div>
