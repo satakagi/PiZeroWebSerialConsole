@@ -358,7 +358,7 @@ document.getElementById("fileUpl").addEventListener("change", (e) => {
 
 
 // --- ここから下を追記（WiFiPanel用のインターフェース公開） ---
-window.portWritelnWaitfor = (cmd, prompt) => serial.writeAndWaitFor(cmd + "\n", prompt);
+window.portWritelnWaitfor = (cmd, prompt, timeoutMs) => serial.writeAndWaitFor(cmd + "\n", prompt, timeoutMs);
 window.getOutputLines = getOutputLines;
 window.cmdPrompt = cmdPrompt;
 window.str2arrayBuffer = (str) => new TextEncoder("utf-8").encode(str);
