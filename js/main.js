@@ -48,7 +48,7 @@ serial.onDataReceived = (data) => {
 };
 
 // --- コネクション＆ログイン ---
-async function autoLogInPiZero() {
+async function autoLogInPiZero(noRetry = false) {
 	await serial.connect();
 	await sleep(100);
 	term.writeln("<<CONNECTED>> Waiting prompt...");
@@ -66,9 +66,20 @@ async function autoLogInPiZero() {
 		}
 	}
 
-	if (ret.indexOf("login:") >= 0) {
+	if (ret.indexOf("pi@") >= 0) {
+		// 既にログイン済み(プロンプトが返ってきている)ので何もしない
+	} else if (ret.indexOf("login:") >= 0) {
 		await serial.writeAndWaitFor(`${loginId}\n`, "Password:");
 		await serial.writeAndWaitFor(`${loginPassword}\n`, "\\$", 40000);
+	} else if (!noRetry) {
+		// 初回はプロンプト確定前の出力に ":" が引っかかり、login: でも pi@ でもない
+		// 中途半端な応答を掴んでしまうことがある。その場合は一度だけやり直す。
+		// （serial.connect() はオープン済みなら何もしないので再オープンされない）
+		await autoLogInPiZero(true);
+		return;
+	} else {
+		console.error("login fail...");
+		return;
 	}
 
 	terminalEl.focus();
@@ -316,7 +327,7 @@ function handleCreateNewTxt(stat) {
 }
 
 // --- イベントリスナー ---
-connectBtn.addEventListener("click", autoLogInPiZero);
+connectBtn.addEventListener("click", () => autoLogInPiZero());
 document.getElementById("closeBtn").addEventListener("click", async () => {
 	await serial.disconnect();
 	connectBtn.style.display = "";
