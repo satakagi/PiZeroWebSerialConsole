@@ -21,7 +21,13 @@ export function base64ToArrayBuffer(base64) {
 }
 
 export function escapePath(path) {
-	const jsonString = JSON.stringify(String(path));
+	const str = String(path);
+	// 安全な文字だけならエスケープ不要(そのまま使える)
+	if (/^[A-Za-z0-9._-]+$/.test(str)) {
+		return str;
+	}
+	// フォールバック: Bash ANSI-C Quoting
+	const jsonString = JSON.stringify(str);
 	return jsonString.replace(/^"/, `$$'`).replace(/"$/, `'`);
 }
 

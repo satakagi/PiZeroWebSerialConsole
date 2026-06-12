@@ -1,6 +1,6 @@
 import { SerialManager } from "./SerialManager.js";
 import { FileManager } from "./FileManager.js";
-import { sleep, pad2, isTextFile, getOutputLines } from "./utils.js";
+import { sleep, pad2, isTextFile, getOutputLines, escapePath } from "./utils.js";
 
 const cmdPrompt = "pi@raspberrypi:";
 const loginId = "pi";
@@ -10,8 +10,8 @@ let currentDirFiles = [];
 let tempBinaryBuffer = null;
 
 const FileManagerMessage = {
-	ja: { move: "移動", view: "表示", edit: "編集", delete: "削除", do: "実行" },
-	en: { move: "move", view: "view", edit: "edit", delete: "delete", do: "do" },
+	ja: { move: "移動", view: "表示", edit: "編集", delete: "削除", do: "実行", run: "実行" },
+	en: { move: "move", view: "view", edit: "edit", delete: "delete", do: "do", run: "run" },
 };
 const lang = navigator.language.startsWith("ja") ? "ja" : "en";
 
@@ -161,6 +161,15 @@ async function renderFileList() {
 			);
 			delLi.appendChild(delCfUl);
 			actUl.appendChild(delLi);
+
+			// .js ファイルにだけ「実行」を表示し、クリックで node 実行する
+			if (file.name.toLowerCase().endsWith(".js")) {
+				actUl.appendChild(
+					createActionLi(FileManagerMessage[lang].run, () =>
+						runJsFile(file.name)
+					)
+				);
+			}
 		}
 		li.appendChild(actUl);
 		ul.appendChild(li);
@@ -169,6 +178,16 @@ async function renderFileList() {
 	// 見栄え用の空行
 	for (let i = 0; i < 3; i++) ul.appendChild(document.createElement("li"));
 	fileListTable.appendChild(ul);
+}
+
+// .js ファイルをターミナルで node 実行する(出力はそのままターミナルへ流す)。
+// 実行中のプロセスや入力中の行を ^C で中断してから実行することで、
+// 何度押しても同じ結果になる(べき等)。先頭にスペースを付けないので
+// シェル履歴(ログ)にコマンドが残る。
+async function runJsFile(fileName) {
+	await serial.write("\x03"); // ctrl+c
+	await sleep(100);
+	await serial.write(`node ${escapePath(fileName)}\n`);
 }
 
 function createActionLi(text, onClick) {
