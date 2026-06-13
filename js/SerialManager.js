@@ -14,6 +14,13 @@ export class SerialManager {
 	}
 
 	async connect(baudRate = 115200) {
+		// 既に接続(オープン)済みなら再オープンしない。
+		// ログイン失敗時の autoLogInPiZero(true) 再試行で再びここに来ると
+		// "InvalidStateError: The port is already open." になり、
+		// さらにポート選択ダイアログが再表示されてしまうのを防ぐ。
+		if (this.port && this.port.readable) {
+			return;
+		}
 		this.port = await navigator.serial.requestPort();
 		await this.port.open({ baudRate });
 		this.isConnecting = true;
